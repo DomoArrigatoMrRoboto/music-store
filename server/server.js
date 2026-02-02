@@ -3,10 +3,16 @@ import fetch from "node-fetch";
 import cors from "cors";
 
 const app = express();
-app.use(cors());
 
-const PORT = 5000;
-const JAMENDO_CLIENT_ID = "73ad071e";
+app.use(
+  cors({
+    origin: "https://your-netlify-site.netlify.app"
+  })
+);
+
+const PORT = process.env.PORT || 5000;
+
+const JAMENDO_CLIENT_ID = process.env.JAMENDO_CLIENT_ID || "73ad071e";
 
 app.get("/api/tracks", async (req, res) => {
   try {
@@ -55,6 +61,6 @@ app.get("/api/tracks", async (req, res) => {
   }
 });
 
-app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`)
-);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

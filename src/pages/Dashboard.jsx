@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button, Toast, ToastContainer, Alert, Spinner } from "react-bootstrap";
 import { useCart } from "../context/CartContext.jsx";
-import { useTracks } from "../context/TracksContext.jsx";
 import NavbarComponent from "../components/NavbarComponent.jsx";
 import FooterComponent from "../components/FooterComponent.jsx";
 import { FaArrowUp } from "react-icons/fa";
@@ -9,10 +8,49 @@ import "../styles/Dashboard.css";
 
 export default function Dashboard() {
   const { addToCart } = useCart();
-  const { tracks, loading, error, refetch } = useTracks();
+
+  const [tracks, setTracks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+  const fetchTracks = useCallback(async () => {
+    setLoading(true);
+    setError(false);
+    try {
+      const res = await fetch(`${API_URL}/api/tracks`);
+      const data = await res.json();
+      setTracks(data);
+    } catch (err) {
+      console.error("Error fetching tracks:", err);
+      setError(true);
+
+      setTracks([
+        {
+          id: 1,
+          name: "Sample Track 1",
+          artist_name: "Sample Artist",
+          image: "https://via.placeholder.com/300"
+        },
+        {
+          id: 2,
+          name: "Sample Track 2",
+          artist_name: "Sample Artist",
+          image: "https://via.placeholder.com/300"
+        }
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  }, [API_URL]);
+
+  useEffect(() => {
+    fetchTracks();
+  }, [fetchTracks]);
 
   const handleAddToCart = (track) => {
     addToCart({
@@ -28,12 +66,8 @@ export default function Dashboard() {
   };
 
   const [showScrollTop, setShowScrollTop] = useState(false);
-
   useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 300);
-    };
-
+    const handleScroll = () => setShowScrollTop(window.scrollY > 300);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -68,7 +102,7 @@ export default function Dashboard() {
               className="d-flex justify-content-between align-items-center"
             >
               <span>Backend unavailable. Showing demo tracks.</span>
-              <Button size="sm" variant="outline-dark" onClick={refetch}>
+              <Button size="sm" variant="outline-dark" onClick={fetchTracks}>
                 Retry
               </Button>
             </Alert>

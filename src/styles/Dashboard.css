@@ -1,0 +1,226 @@
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #000000, #5a00aa, #ff4fc1);
+  color: #fff;
+  position: relative;
+}
+
+.dashboard-bg-images {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 4%;
+  padding: 2%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-img {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  border-radius: 26px;
+  filter: blur(1.5px) brightness(0.8);
+  opacity: 0.35;
+  animation: floatArt 25s ease-in-out infinite;
+  z-index: 1;
+}
+
+.img-1 {
+  background-image: url("/assets/pictures/background-img-1.jpg");
+}
+.img-2 {
+  background-image: url("/assets/pictures/background-img-2.jpg");
+}
+.img-3 {
+  background-image: url("/assets/pictures/background-img-3.jpg");
+}
+.img-4 {
+  background-image: url("/assets/pictures/background-img-4.jpg");
+}
+.img-5 {
+  background-image: url("/assets/pictures/background-img-5.jpg");
+}
+.img-6 {
+  background-image: url("/assets/pictures/background-img-6.jpg");
+}
+.img-7 {
+  background-image: url("/assets/pictures/background-img-7.jpg");
+}
+.img-8 {
+  background-image: url("/assets/pictures/background-img-8.jpg");
+}
+.img-9 {
+  background-image: url("/assets/pictures/background-img-9.jpg");
+}
+.img-10 {
+  background-image: url("/assets/pictures/background-img-10.jpg");
+}
+.img-11 {
+  background-image: url("/assets/pictures/background-img-11.jpg");
+}
+.img-12 {
+  background-image: url("/assets/pictures/background-img-12.jpg");
+}
+.img-13 {
+  background-image: url("/assets/pictures/background-img-13.jpg");
+}
+.img-14 {
+  background-image: url("/assets/pictures/background-img-14.jpg");
+}
+.img-15 {
+  background-image: url("/assets/pictures/background-img-15.jpg");
+}
+.img-16 {
+  background-image: url("/assets/pictures/background-img-16.jpg");
+}
+.img-17 {
+  background-image: url("/assets/pictures/background-img-17.jpg");
+}
+.img-18 {
+  background-image: url("/assets/pictures/background-img-18.jpg");
+}
+
+.bg-img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(90, 0, 170, 0.15),
+    rgba(255, 79, 193, 0.15)
+  );
+  pointer-events: none;
+}
+
+@keyframes floatArt {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(0.5deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(1deg);
+  }
+  75% {
+    transform: translateY(-10px) rotate(0.5deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+.dashboard-container {
+  flex: 1;
+  max-width: 1400px;
+  padding: 1.5rem 2rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding-top: 10rem;
+  gap: 2rem;
+  position: relative;
+  z-index: 5;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin: 3.5rem 0 4rem 0;
+}
+
+.music-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.music-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(90, 0, 170, 0.6);
+  transition: 0.3s ease;
+  flex: 1 1 220px;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  min-height: 360px;
+  position: relative;
+  z-index: 6;
+}
+
+.music-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 25px rgba(127, 0, 255, 0.9);
+}
+
+.music-card img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.btn-add-cart {
+  margin-top: auto;
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #7f00ff, #e100ff);
+  border: none;
+  color: #fff;
+  transition: 0.3s ease;
+}
+
+.btn-add-cart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(127, 0, 255, 0.6);
+}
+
+.btn-add-cart:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.scroll-top-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  border: none;
+  background: none;
+  color: #ff4fc1;
+  font-size: 48px;
+  font-weight: 900;
+  cursor: pointer;
+  z-index: 9999 !important;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    all 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.scroll-top-btn.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scroll-top-btn:hover {
+  color: #e100ff;
+  transform: translateY(-6px) scale(1.2);
+}
+.scroll-top-btn:active {
+  transform: translateY(0) scale(1);
+}
+

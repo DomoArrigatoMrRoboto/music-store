@@ -13,14 +13,14 @@ export const TracksProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const BACKEND_URL = "http://localhost:5000/api/tracks";
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   const fetchTracks = useCallback(async () => {
     setLoading(true);
     setError(false);
 
     try {
-      const res = await fetch(BACKEND_URL);
+      const res = await fetch(`${API_URL}/api/tracks`);
       if (!res.ok) throw new Error("Failed to fetch tracks");
 
       const data = await res.json();
@@ -46,14 +46,11 @@ export const TracksProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [API_URL]);
 
-  useEffect(
-    () => {
-      fetchTracks();
-    },
-    [fetchTracks]
-  );
+  useEffect(() => {
+    fetchTracks();
+  }, [fetchTracks]);
 
   return (
     <TracksContext.Provider
@@ -66,6 +63,8 @@ export const TracksProvider = ({ children }) => {
 
 export const useTracks = () => {
   const context = useContext(TracksContext);
-  if (!context) throw new Error("useTracks must be used inside TracksProvider");
+  if (!context) {
+    throw new Error("useTracks must be used inside TracksProvider");
+  }
   return context;
 };

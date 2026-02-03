@@ -4,14 +4,25 @@ import cors from "cors";
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://themusicstore.netlify.app"
+];
+
 app.use(
   cors({
-    origin: "https://your-netlify-site.netlify.app"
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("CORS not allowed for this origin"), false);
+      }
+    }
   })
 );
 
 const PORT = process.env.PORT || 5000;
-
 const JAMENDO_CLIENT_ID = process.env.JAMENDO_CLIENT_ID || "73ad071e";
 
 app.get("/api/tracks", async (req, res) => {
@@ -19,45 +30,16 @@ app.get("/api/tracks", async (req, res) => {
     const response = await fetch(
       `https://api.jamendo.com/v3.0/tracks/?client_id=${JAMENDO_CLIENT_ID}&format=json&limit=50&order=popularity_total`
     );
-    const data = await response.json();
 
-    console.log("Jamendo API response:", data);
-
-    if (data.results && data.results.length > 0) {
-      res.json(data.results);
-    } else {
-      res.json([
-        {
-          id: 1,
-          name: "Sample Track 1",
-          artist_name: "Sample Artist",
-          image: "https://via.placeholder.com/300"
-        },
-        {
-          id: 2,
-          name: "Sample Track 2",
-          artist_name: "Sample Artist",
-          image: "https://via.placeholder.com/300"
-        }
-      ]);
+    if (!response.ok) {
+      throw new Error(`Jamendo API error: ${response.status}`);
     }
-  } catch (err) {
-    console.error("Server fetch error:", err);
 
-    res.json([
-      {
-        id: 1,
-        name: "Sample Track 1",
-        artist_name: "Sample Artist",
-        image: "https://via.placeholder.com/300"
-      },
-      {
-        id: 2,
-        name: "Sample Track 2",
-        artist_name: "Sample Artist",
-        image: "https://via.placeholder.com/300"
-      }
-    ]);
+    const data = await response.json();
+    res.json(data.results || []);
+  } catch (err) {
+    console.error("Server fetch error:", err.message);
+    res.status(500).json({ error: "Failed to fetch tracks" });
   }
 });
 
